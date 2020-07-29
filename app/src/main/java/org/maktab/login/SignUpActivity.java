@@ -22,21 +22,20 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("bashir","salam0");
         setContentView(R.layout.activity_main);
         findViews();
         setOnClickListeners();
         mButtonLogin.setVisibility(View.GONE);
-        mButtonSignUp.setTextSize(20);
-        mButtonSignUp.setWidth(30);
+        mButtonSignUp.setTextSize(10);
+        mButtonSignUp.setWidth(200);
         Intent intent = getIntent();
         String username = intent.getStringExtra(LoginActivity.KEY_USER_NAME);
-        String password = intent.getStringExtra(LoginActivity.KEY_PASSWORD);
+        int password = intent.getIntExtra(LoginActivity.KEY_PASSWORD,0);
 
         if(username !=null){
             mEditTextUserName.setText(String.valueOf(username));
         }
-        if(password!=null){
+        if(password!=0){
             mEditTextPassword.setText(String.valueOf(password));
         }
     }
@@ -56,7 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
                 String userName = String.valueOf(mEditTextUserName.getText());
                 String password = String.valueOf(mEditTextPassword.getText());
                 Log.d("bashir","salam2");
-                if(userName!=null || password!=null){
+                if(!userName.equals("") && !password.equals("")){
                     Log.d("bashir","salam3");
                     Intent intent = new Intent();
                     intent.putExtra(LoginActivity.KEY_USER_NAME,userName);
@@ -70,4 +69,5 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+    
 }

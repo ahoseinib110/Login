@@ -1,10 +1,12 @@
 package org.maktab.login;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +35,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -40,10 +47,11 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         if(requestCode==REQUEST_CODE_SIGN_UP){
+            Log.d("bashir","salam5");
             mUserName = data.getStringExtra(KEY_USER_NAME);
             mPassword = data.getIntExtra(KEY_PASSWORD,0);
             mEditTextUserName.setText(mUserName);
-            mEditTextPassword.setText(mPassword);
+            mEditTextPassword.setText(String.valueOf(mPassword));
         }
     }
 
@@ -93,14 +101,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public boolean isEmptyUserName(){
-        if(mEditTextUserName.getText()==null ){
+        if(String.valueOf(mEditTextUserName.getText()).equals("") ){
             return true;
         }
         return false;
     }
 
     public boolean isEmptyPassword(){
-        if( mEditTextPassword.getText()==null){
+        if( String.valueOf(mEditTextPassword.getText()).equals("")){
             return true;
         }
         return false;
