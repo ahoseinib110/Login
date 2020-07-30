@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,8 +27,8 @@ public class SignUpActivity extends AppCompatActivity {
         findViews();
         setOnClickListeners();
         mButtonLogin.setVisibility(View.GONE);
-        mButtonSignUp.setTextSize(10);
-        mButtonSignUp.setWidth(200);
+        mButtonSignUp.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+        mButtonSignUp.getLayoutParams().width = 300;
         Intent intent = getIntent();
         String username = intent.getStringExtra(LoginActivity.KEY_USER_NAME);
         int password = intent.getIntExtra(LoginActivity.KEY_PASSWORD,0);

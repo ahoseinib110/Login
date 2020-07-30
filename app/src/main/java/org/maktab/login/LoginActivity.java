@@ -7,11 +7,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -26,18 +29,29 @@ public class LoginActivity extends AppCompatActivity {
     private String mUserName;
     private int mPassword;
 
+    androidx.constraintlayout.widget.ConstraintLayout mainLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViews();
         setOnClickListeners();
+        Log.d("bashir","salam111");
+        if(savedInstanceState!=null){
+            mUserName = savedInstanceState.getString(KEY_USER_NAME);
+            mPassword = savedInstanceState.getInt(KEY_PASSWORD,0);
+        }
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(mUserName!=null && mPassword!=0){
+            outState.putString(KEY_USER_NAME, mUserName);
+            outState.putInt(KEY_PASSWORD, mPassword);
+        }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -47,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         if(requestCode==REQUEST_CODE_SIGN_UP){
-            Log.d("bashir","salam5");
             mUserName = data.getStringExtra(KEY_USER_NAME);
             mPassword = data.getIntExtra(KEY_PASSWORD,0);
             mEditTextUserName.setText(mUserName);
@@ -60,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         mEditTextPassword = findViewById(R.id.editTextPassword);
         mButtonLogin = findViewById(R.id.buttonLogin);
         mButtonSignUp = findViewById(R.id.buttonSignUp);
+        mainLayout = findViewById(R.id.mainLayout);
     }
 
     private void setOnClickListeners() {
@@ -73,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                     String password = String.valueOf(mEditTextPassword.getText());
                     if (mPassword != 0 || mUserName != null) {
                         if (mUserName.equals(userName) &&  mPassword == Integer.parseInt(password)) {
-                            Toast.makeText(LoginActivity.this, "correct", Toast.LENGTH_SHORT).show();
+                            showSnackbar();
                         } else {
                             Toast.makeText(LoginActivity.this, "user name or password is incorrect!", Toast.LENGTH_SHORT).show();
                         }
@@ -87,7 +101,6 @@ public class LoginActivity extends AppCompatActivity {
         mButtonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("bashir","hi1");
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 if(!isEmptyUserName()) {
                     intent.putExtra(KEY_USER_NAME, String.valueOf(mEditTextUserName.getText()));
@@ -98,6 +111,17 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_CODE_SIGN_UP);
             }
         });
+    }
+
+    private void showSnackbar() {
+        Snackbar snackbar = Snackbar.make(mainLayout,"Correct",Snackbar.LENGTH_SHORT);
+        snackbar.setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        snackbar.show();
     }
 
     public boolean isEmptyUserName(){
